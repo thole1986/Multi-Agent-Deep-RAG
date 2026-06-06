@@ -47,7 +47,5 @@ def get_weather(location: str):
 
     response = requests.get(url=url, timeout=10)
     response.raise_for_status()
-
     data = response.json()
-
     return data
