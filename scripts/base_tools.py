@@ -20,7 +20,8 @@ def web_search(query: str):
         JSON string of top results (max_results=2).
     """
 
-    response = ollama.web_search(query=query, max_results=2)
+    # response = ollama.web_search(query=query, max_results=2)
+    response = ollama.web_search(query=query, max_results=1)
     response = response.results
 
     return response
