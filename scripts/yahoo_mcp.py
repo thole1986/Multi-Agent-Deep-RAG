@@ -26,11 +26,20 @@ load_dotenv()
 from langchain_core.messages import HumanMessage
 from langchain.agents import create_agent
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 
 import asyncio
 from langchain_mcp_adapters.client import MultiServerMCPClient
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+# llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
+
+# llm = ChatOpenAI(
+#     # model="deepseek-v4-pro",
+#     model="deepseek-v4-flash",
+#     api_key=os.getenv("DEEPSEEK_API_KEY"),
+#     base_url="https://api.deepseek.com"
+# )
 
 
 system_prompt = """
@@ -78,7 +87,7 @@ async def get_tools():
     return tools
 
 
-async def finance_research(query):
+async def finance_research(query: str):
     tools = await get_tools()
 
     agent = create_agent(model=llm, tools=tools, system_prompt=system_prompt)
@@ -93,6 +102,8 @@ async def finance_research(query):
 
 
 if __name__ == "__main__":
-    query = "What is the current stock price and recent performance of Apple (AAPL)? Also show me the latest news."
-
+    query = """
+        What is the current stock price and recent performance of Apple (AAPL)? 
+        Also show me the latest news.
+    """
     asyncio.run(finance_research(query))
