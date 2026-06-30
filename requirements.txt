@@ -11,6 +11,7 @@ langfuse
 langgraph
 langsmith
 langchain-openai
+langchain-ollama 
 langchain-google-genai
 langchain_qdrant
 langchain_mcp_adapters
