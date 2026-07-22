@@ -27,12 +27,13 @@ from langchain_core.messages import HumanMessage
 from langchain.agents import create_agent
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 
 import asyncio
 from langchain_mcp_adapters.client import MultiServerMCPClient
 
-# llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
+
 
 # llm = ChatOpenAI(
 #     # model="deepseek-v4-pro",
