@@ -2,11 +2,17 @@
 Utility functions for agent operations.
 """
 from langchain.messages import HumanMessage, AIMessage, ToolMessage
+from langfuse.langchain import CallbackHandler
+
+langfuse_trace = CallbackHandler()
 
 
 def stream_agent_response(agent, query, thread_id="default", user_id=None):
 
-    config = {'configurable': {'thread_id': thread_id, 'user_id': user_id}}
+    config = {
+        'configurable': {'thread_id': thread_id, 'user_id': user_id},
+        'callbacks': [langfuse_trace]
+    }
     
     state = {'messages': [HumanMessage(query)], 'thread_id': thread_id, 'user_id': user_id}
     
