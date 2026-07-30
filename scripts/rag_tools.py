@@ -2,6 +2,8 @@
 # ### Dense, Sparse, Hybrid, and Reranking
 
 from dotenv import load_dotenv
+from langchain_ollama import ChatOllama
+from langfuse.langchain import CallbackHandler
 
 load_dotenv()
 
@@ -25,13 +27,17 @@ import sys
 COLLECTION_NAME = "financial_docs"
 EMBEDDING_MODEL = "models/gemini-embedding-001"
 LLM_MODEL = "gemini-2.5-flash"
+LLM_OLLAMA_MODEL = "granite4.1:8b"
 
 RERANKER_MODEL = "BAAI/bge-reranker-base"
+
+langfuse_trace = CallbackHandler()
 
 # ### Initialize LLM and Vector Store
 
 # Initialize LLM
 llm = ChatGoogleGenerativeAI(model=LLM_MODEL)
+ollama_llm = ChatOllama(model=LLM_OLLAMA_MODEL)
 
 # Gemini embeddings
 embeddings = GoogleGenerativeAIEmbeddings(model=EMBEDDING_MODEL)
@@ -84,9 +90,10 @@ def extract_filters(user_query: str):
                 Extract metadata based on the user query only:
             """
 
-    structurerd_llm = llm.with_structured_output(ChunkMetadata)
+    # structurerd_llm = llm.with_structured_output(ChunkMetadata)
+    structurerd_llm = ollama_llm.with_structured_output(ChunkMetadata)
 
-    metadata = structurerd_llm.invoke(prompt)
+    metadata = structurerd_llm.invoke(prompt, config={"callbacks": [langfuse_trace]})
 
     if metadata:
         filters = metadata.model_dump(exclude_none=True)
